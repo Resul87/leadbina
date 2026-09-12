@@ -1,0 +1,174 @@
+{
+  "Xətai r.": {
+    "id": 16,
+    "sublocations": {
+      "Həzi Aslanov q.": 99,
+      "Şah İsmayıl Xətai m.": 36,
+      "Əhmədli m.": 51,
+      "NZS q.": 233,
+      "Həzi Aslanov m.": 33,
+      "Köhnə Günəşli q.": 200,
+      "Əhmədli q.": 100,
+      "Ağ şəhər q.": 314
+    }
+  },
+  "Yasamal r.": {
+    "id": 10,
+    "sublocations": {
+      "Yasamal q.": 103,
+      "Yeni Yasamal q.": 102,
+      "İnşaatçılar m.": 7,
+      "20 Yanvar m.": 5,
+      "Nizami m.": 35,
+      "Elmlər Akademiyası m.": 34
+    }
+  },
+  "Nəsimi r.": {
+    "id": 11,
+    "sublocations": {
+      "8 Noyabr m.": 279,
+      "1-ci mikrorayon q.": 123,
+      "4-cü mikrorayon q.": 126,
+      "Nəsimi m.": 60,
+      "28 May m.": 8,
+      "2-ci mikrorayon q.": 124,
+      "3-cü mikrorayon q.": 125,
+      "Memar Əcəmi m.": 59,
+      "5-ci mikrorayon q.": 127,
+      "Kubinka q.": 70
+    }
+  },
+  "Nərimanov r.": {
+    "id": 12,
+    "sublocations": {
+      "Bakmil m.": 63,
+      "Nəriman Nərimanov m.": 1,
+      "Gənclik m.": 2,
+      "Ulduz m.": 3,
+      "Böyükşor q.": 68
+    }
+  },
+  "Səbail r.": {
+    "id": 9,
+    "sublocations": {
+      "Badamdar q.": 46,
+      "Şıxov q.": 260,
+      "20-ci sahə q.": 48,
+      "Bayıl q.": 49,
+      "Bibiheybət q.": 47,
+      "Sahil m.": 38
+    }
+  },
+  "Nizami r.": {
+    "id": 13,
+    "sublocations": {
+      "8-ci kilometr q.": 74,
+      "Neftçilər m.": 53,
+      "Keşlə q.": 105,
+      "Qara Qarayev m.": 52,
+      "Xalqlar Dostluğu m.": 54,
+      "Koroğlu m.": 4
+    }
+  },
+  "Binəqədi r.": {
+    "id": 14,
+    "sublocations": {
+      "Azadlıq Prospekti m.": 6,
+      "Dərnəgül m.": 61,
+      "2-ci Alatava q.": 73,
+      "Xutor q.": 104,
+      "Binəqədi q.": 18,
+      "Xocəsən q.": 9,
+      "M.Ə.Rəsulzadə q.": 19,
+      "6-cı mikrorayon q.": 128,
+      "8-ci mikrorayon q.": 130,
+      "Sulutəpə q.": 64,
+      "Avtovağzal m.": 266,
+      "Xocəsən m.": 315,
+      "28 May q.": 259,
+      "7-ci mikrorayon q.": 129,
+      "9-cu mikrorayon q.": 131,
+      "Biləcəri q.": 17
+    }
+  },
+  "Sabunçu r.": {
+    "id": 15,
+    "sublocations": {
+      "Maştağa q.": 122,
+      "Nardaran q.": 119,
+      "Yeni Ramana q.": 77,
+      "Balaxanı q.": 243,
+      "Ramana q.": 76,
+      "Bakıxanov q.": 69,
+      "Bilgəh q.": 118,
+      "Kürdəxanı q.": 120,
+      "Pirşağı q.": 121,
+      "Yeni Balaxanı q.": 242,
+      "Sea Breeze q.": 380,
+      "Sabunçu q.": 86,
+      "Savalan q.": 234,
+      "Zabrat q.": 78,
+      "Albalılıq q.": 313
+    }
+  },
+  "Suraxanı r.": {
+    "id": 17,
+    "sublocations": {
+      "Massiv B q.": 82,
+      "Massiv A q.": 81,
+      "Massiv V q.": 83,
+      "Massiv G q.": 84,
+      "Əmircan q.": 72,
+      "Zığ q.": 89,
+      "Dədə Qorqud q.": 255,
+      "Bahar q.": 256,
+      "Qaraçuxur q.": 75,
+      "Suraxanı q.": 87,
+      "Şərq q.": 80,
+      "Günəşli q.": 91,
+      "Bülbülə q.": 244,
+      "Yeni Suraxanı q.": 88,
+      "Hövsan q.": 93,
+      "Massiv D q.": 85,
+      "Yeni Günəşli q.": 92
+    }
+  },
+  "Xəzər r.": {
+    "id": 18,
+    "sublocations": {
+      "Binə q.": 79,
+      "Dübəndi q.": 97,
+      "Buzovna q.": 117,
+      "Gürgən q.": 252,
+      "Şağan q.": 108,
+      "Qala q.": 95,
+      "Şüvəlan q.": 110,
+      "Şimal DRES q.": 107,
+      "Zirə q.": 96,
+      "Mərdəkan q.": 109,
+      "Türkan q.": 94
+    }
+  },
+  "Abşeron r.": {
+    "id": 197,
+    "sublocations": {}
+  },
+  "Qaradağ r.": {
+    "id": 20,
+    "sublocations": {
+      "Qızıldaş q.": 257,
+      "Ələt q.": 24,
+      "Qobustan q.": 45,
+      "Lökbatan q.": 20,
+      "Puta q.": 22,
+      "Sahil q.": 21,
+      "Şubanı q.": 71,
+      "Səngəçal q.": 23,
+      "Müşfiqabad q.": 98
+    }
+  },
+  "Pirallahı r.": {
+    "id": 19,
+    "sublocations": {}
+  }
+}

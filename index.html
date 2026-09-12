@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="az" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BinaLeadPro Cloud — Daşınmaz Əmlak İntellekt və Lead Platforması</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+            },
+            accent: {
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+            },
+            dark: {
+              900: '#0b0f19',
+              800: '#111827',
+              700: '#1f2937',
+              600: '#374151',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background: radial-gradient(circle at 50% 0%, #172033 0%, #0b0f19 100%);
+      min-height: 100vh;
+      color: #f3f4f6;
+    }
+    .glass-panel {
+      background: rgba(17, 24, 39, 0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-input {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      transition: all 0.2s;
+    }
+    .glass-input:focus {
+      border-color: #10b981;
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b0f19;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1f2937;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #374151;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.8; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+    .glow-dot {
+      animation: pulseGlow 2s infinite ease-in-out;
+    }
+    .fade-in-row {
+      animation: fadeInRow 0.35s ease-out forwards;
+    }
+    @keyframes fadeInRow {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .room-pill.active {
+      background: #10b981;
+      color: #ffffff;
+      border-color: #10b981;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+    }
+  </style>
+</head>
+<body class="font-sans antialiased text-slate-200">
+
+  <!-- ================= TOP NAVIGATION BAR ================= -->
+  <nav class="sticky top-0 z-40 glass-panel border-b border-slate-800/80 px-4 lg:px-8 py-3.5">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 via-teal-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+          <i class="fa-solid fa-building-circle-check text-white text-lg"></i>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">BinaLeadPro</span>
+            <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Cloud v3.5 Pro</span>
+          </div>
+          <p class="text-xs text-slate-400 hidden sm:block">Daşınmaz Əmlak Kəşfiyyatı və B2B Lead Platforması</p>
+        </div>
+      </div>
+
+      <!-- Right Header Actions & License Status -->
+      <div class="flex items-center space-x-4">
+        <!-- Live Status Pill -->
+        <div id="liveStatusBadge" class="hidden sm:flex items-center space-x-2 px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700/60 text-xs">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 glow-dot"></span>
+          <span class="text-slate-300">Baza Əlaqəsi: Aktiv</span>
+        </div>
+
+        <!-- License Widget -->
+        <div id="licenseWidget" class="flex items-center space-x-2 px-3.5 py-1.5 rounded-lg bg-emerald-950/40 border border-emerald-500/30 text-xs">
+          <i class="fa-solid fa-clock text-emerald-400"></i>
+          <div>
+            <span class="text-slate-400 text-[11px] block sm:inline">Lisenziya: </span>
+            <span id="licenseTimeRemaining" class="font-semibold text-emerald-300">Yoxlanılır...</span>
+          </div>
+          <button onclick="openLicenseModal()" title="Lisenziyanı dəyiş və ya yenilə" class="ml-1 text-slate-400 hover:text-emerald-300 transition-colors">
+            <i class="fa-solid fa-key"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- ================= MAIN CONTAINER ================= -->
+  <main class="max-w-7xl mx-auto px-4 lg:px-8 py-6 space-y-6">
+
+    <!-- HERO / TITLE SECTION -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-2 border-b border-slate-800">
+      <div>
+        <h1 class="text-2xl font-extrabold tracking-tight text-white flex items-center gap-2">
+          <span>Canlı Lead və Qiymət Analizi Skaneri</span>
+          <span class="text-xs font-medium px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">3 Mənbə</span>
+        </h1>
+        <p class="text-sm text-slate-400 mt-0.5">Bina.az, YeniEmlak.az və Tap.az üzərindən 100% açıq nömrəli mülkiyyətçi və makler bazası.</p>
+      </div>
+
+      <!-- Lead Mode Switcher Tabs -->
+      <div class="inline-flex p-1 rounded-xl bg-slate-900 border border-slate-800 self-start md:self-auto shadow-inner">
+        <button id="tabFSBO" onclick="setTargetType('FSBO')" class="flex items-center space-x-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all bg-emerald-500 text-white shadow-md shadow-emerald-500/20">
+          <i class="fa-solid fa-user-tie"></i>
+          <span>Mülkiyyətçilər (Sahibindən)</span>
+        </button>
+        <button id="tabAGENT" onclick="setTargetType('AGENT')" class="flex items-center space-x-2 px-4 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition-all">
+          <i class="fa-solid fa-briefcase"></i>
+          <span>Maklerlər / Agentliklər</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- FILTER & CONTROLS PANEL -->
+    <div class="glass-panel rounded-2xl p-5 shadow-xl space-y-4">
+      
+      <!-- Row 1: Region, Sub-location, Listing Type, Category -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+        <!-- 1. Region Selector -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">
+            <i class="fa-solid fa-location-dot text-emerald-400 mr-1"></i> Rayon
+          </label>
+          <select id="selRegion" onchange="onRegionChange()" class="w-full glass-input rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none">
+            <option value="Bütün Bakı">Bütün Bakı</option>
+            <option value="Xətai r." selected>Xətai r.</option>
+            <option value="Yasamal r.">Yasamal r.</option>
+            <option value="Nəsimi r.">Nəsimi r.</option>
+            <option value="Nərimanov r.">Nərimanov r.</option>
+            <option value="Səbail r.">Səbail r.</option>
+            <option value="Binəqədi r.">Binəqədi r.</option>
+            <option value="Nizami r.">Nizami r.</option>
+            <option value="Sabunçu r.">Sabunçu r.</option>
+            <option value="Suraxanı r.">Suraxanı r.</option>
+            <option value="Xəzər r.">Xəzər r.</option>
+            <option value="Qaradağ r.">Qaradağ r.</option>
+            <option value="Abşeron r.">Abşeron r.</option>
+          </select>
+        </div>
+
+        <!-- 2. Sub-location Selector (Dynamic) -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">
+            <i class="fa-solid fa-train-subway text-emerald-400 mr-1"></i> Metro / Qəsəbə
+          </label>
+          <select id="selSublocation" class="w-full glass-input rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none">
+            <option value="Bütün rayon üzrə">Bütün rayon üzrə</option>
+          </select>
+        </div>
+
+        <!-- 3. Listing Type -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">
+            <i class="fa-solid fa-handshake text-emerald-400 mr-1"></i> Əməliyyat Növü
+          </label>
+          <select id="selListingType" class="w-full glass-input rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none">
+            <option value="Alqı-satqı" selected>Alqı-satqı</option>
+            <option value="Kirayə">Kirayə</option>
+          </select>
+        </div>
+
+        <!-- 4. Category -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">
+            <i class="fa-solid fa-tags text-emerald-400 mr-1"></i> Kateqoriya
+          </label>
+          <select id="selCategory" class="w-full glass-input rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none">
+            <option value="Bütün Mənzillər" selected>Bütün Mənzillər</option>
+            <option value="Yeni tikili">Yeni tikili</option>
+            <option value="Köhnə tikili">Köhnə tikili</option>
+            <option value="Həyət evi / Villa">Həyət evi / Villa</option>
+            <option value="Ofis">Ofis</option>
+            <option value="Obyekt">Obyekt</option>
+            <option value="Torpaq">Torpaq</option>
+            <option value="Qaraj">Qaraj</option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- Row 2: Room Counts, Price Range, Area Range -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2 border-t border-slate-800/80">
+        
+        <!-- Room Counts Pills -->
+        <div class="lg:col-span-2">
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">
+            <i class="fa-solid fa-bed text-emerald-400 mr-1"></i> Otaq Sayı (Birdən çox seçilə bilər)
+          </label>
+          <div class="flex items-center space-x-2 pt-0.5">
+            <button type="button" onclick="toggleRoom(this, '1')" class="room-pill flex-1 py-1.5 rounded-lg border border-slate-700 bg-slate-800/60 text-xs font-bold text-slate-300 hover:border-slate-500 transition-all">1</button>
+            <button type="button" onclick="toggleRoom(this, '2')" class="room-pill flex-1 py-1.5 rounded-lg border border-slate-700 bg-slate-800/60 text-xs font-bold text-slate-300 hover:border-slate-500 transition-all">2</button>
+            <button type="button" onclick="toggleRoom(this, '3')" class="room-pill flex-1 py-1.5 rounded-lg border border-slate-700 bg-slate-800/60 text-xs font-bold text-slate-300 hover:border-slate-500 transition-all">3</button>
+            <button type="button" onclick="toggleRoom(this, '4')" class="room-pill flex-1 py-1.5 rounded-lg border border-slate-700 bg-slate-800/60 text-xs font-bold text-slate-300 hover:border-slate-500 transition-all">4</button>
+            <button type="button" onclick="toggleRoom(this, '5+')" class="room-pill flex-1 py-1.5 rounded-lg border border-slate-700 bg-slate-800/60 text-xs font-bold text-slate-300 hover:border-slate-500 transition-all">5+</button>
+            <button type="button" onclick="clearRooms()" class="px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-[11px] text-slate-400 hover:text-white" title="Seçimləri sıfırla">
+              <i class="fa-solid fa-rotate-left"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Price Range -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">
+            <i class="fa-solid fa-manat-sign text-emerald-400 mr-1"></i> Qiymət (AZN)
+          </label>
+          <div class="grid grid-cols-2 gap-2">
+            <input id="numPriceMin" type="number" placeholder="Min AZN" class="glass-input rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none">
+            <input id="numPriceMax" type="number" placeholder="Maks AZN" class="glass-input rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none">
+          </div>
+        </div>
+
+        <!-- Area Range -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">
+            <i class="fa-solid fa-ruler-combined text-emerald-400 mr-1"></i> Sahə (m²)
+          </label>
+          <div class="grid grid-cols-2 gap-2">
+            <input id="numAreaMin" type="number" placeholder="Min m²" class="glass-input rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none">
+            <input id="numAreaMax" type="number" placeholder="Maks m²" class="glass-input rounded-xl px-2.5 py-2 text-xs text-white focus:outline-none">
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Row 3: Special Conditions (Kupça, İpoteka, Təmir) -->
+      <div class="pt-2 border-t border-slate-800/80 flex flex-wrap items-center gap-4 sm:gap-8 text-xs">
+        <span class="text-slate-400 font-semibold flex items-center gap-1.5">
+          <i class="fa-solid fa-stamp text-emerald-400"></i> Xüsusi Şərtlər:
+        </span>
+
+        <label class="flex items-center space-x-2 cursor-pointer bg-slate-800/40 hover:bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700/60 transition-colors">
+          <input type="checkbox" id="chkKupca" class="rounded bg-slate-900 border-slate-700 text-emerald-500 focus:ring-0">
+          <span class="font-medium text-white">📜 Yalnız Kupçalı (Çıxarışlı)</span>
+        </label>
+
+        <label class="flex items-center space-x-2 cursor-pointer bg-slate-800/40 hover:bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700/60 transition-colors">
+          <input type="checkbox" id="chkIpoteka" class="rounded bg-slate-900 border-slate-700 text-blue-500 focus:ring-0">
+          <span class="font-medium text-white">🏦 İpotekaya Yararlı</span>
+        </label>
+
+        <label class="flex items-center space-x-2 cursor-pointer bg-slate-800/40 hover:bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700/60 transition-colors">
+          <input type="checkbox" id="chkTemir" class="rounded bg-slate-900 border-slate-700 text-amber-500 focus:ring-0">
+          <span class="font-medium text-white">🔨 Yalnız Təmirli</span>
+        </label>
+      </div>
+
+      <!-- Row 4: Sources Quotas & Action Buttons -->
+      <div class="pt-3 border-t border-slate-800 flex flex-col lg:flex-row items-center justify-between gap-4">
+        
+        <!-- Source checkboxes & limits -->
+        <div class="flex flex-wrap items-center gap-3 text-xs">
+          <span class="text-slate-400 font-semibold">Mənbələr və Limitlər:</span>
+          
+          <label class="flex items-center space-x-1.5 cursor-pointer bg-slate-800/60 px-3 py-1.5 rounded-lg border border-slate-700/60 hover:border-slate-600">
+            <input type="checkbox" id="chkSourceBina" checked class="rounded bg-slate-900 border-slate-700 text-emerald-500 focus:ring-0">
+            <span class="font-semibold text-white">bina.az</span>
+            <input type="number" id="numMaxBina" value="20" min="1" max="200" class="w-12 text-center bg-slate-900 rounded border border-slate-700 py-0.5 text-slate-300 text-xs">
+          </label>
+
+          <label class="flex items-center space-x-1.5 cursor-pointer bg-slate-800/60 px-3 py-1.5 rounded-lg border border-slate-700/60 hover:border-slate-600">
+            <input type="checkbox" id="chkSourceYeni" checked class="rounded bg-slate-900 border-slate-700 text-emerald-500 focus:ring-0">
+            <span class="font-semibold text-white">yeniemlak.az</span>
+            <input type="number" id="numMaxYeni" value="10" min="1" max="100" class="w-12 text-center bg-slate-900 rounded border border-slate-700 py-0.5 text-slate-300 text-xs">
+          </label>
+
+          <label class="flex items-center space-x-1.5 cursor-pointer bg-slate-800/60 px-3 py-1.5 rounded-lg border border-slate-700/60 hover:border-slate-600">
+            <input type="checkbox" id="chkSourceTap" checked class="rounded bg-slate-900 border-slate-700 text-emerald-500 focus:ring-0">
+            <span class="font-semibold text-white">tap.az</span>
+            <input type="number" id="numMaxTap" value="5" min="1" max="100" class="w-12 text-center bg-slate-900 rounded border border-slate-700 py-0.5 text-slate-300 text-xs">
+          </label>
+        </div>
+
+        <!-- Action Control Buttons -->
+        <div class="flex items-center space-x-3 w-full lg:w-auto justify-end">
+          <button id="btnStop" onclick="stopScraping()" style="display: none;" class="px-5 py-2.5 rounded-xl bg-rose-600/90 hover:bg-rose-500 text-white text-xs font-bold transition-all shadow-lg shadow-rose-600/20 flex items-center space-x-2">
+            <i class="fa-solid fa-stop"></i>
+            <span>Axtarışı Dayandır</span>
+          </button>
+
+          <button id="btnStart" onclick="startScraping()" class="px-8 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white text-xs font-bold transition-all shadow-lg shadow-emerald-500/25 flex items-center space-x-2">
+            <i class="fa-solid fa-bolt"></i>
+            <span>Axtarışa Başla</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- REAL-TIME METRICS CARDS -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+      <div class="glass-panel p-4 rounded-xl border border-slate-800 flex items-center justify-between">
+        <div>
+          <p class="text-[11px] font-medium text-slate-400">Toplanan Unikal Lead</p>
+          <p id="statAccepted" class="text-2xl font-extrabold text-emerald-400 mt-0.5">0</p>
+        </div>
+        <div class="w-9 h-9 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+          <i class="fa-solid fa-user-check text-sm"></i>
+        </div>
+      </div>
+
+      <div class="glass-panel p-4 rounded-xl border border-slate-800 flex items-center justify-between">
+        <div>
+          <p class="text-[11px] font-medium text-slate-400">Skan Edilən Elan</p>
+          <p id="statScanned" class="text-2xl font-extrabold text-blue-400 mt-0.5">0</p>
+        </div>
+        <div class="w-9 h-9 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center">
+          <i class="fa-solid fa-magnifying-glass text-sm"></i>
+        </div>
+      </div>
+
+      <div class="glass-panel p-4 rounded-xl border border-slate-800 flex items-center justify-between">
+        <div>
+          <p class="text-[11px] font-medium text-slate-400">Filtirlənən / Keçilən</p>
+          <p id="statSkipped" class="text-2xl font-extrabold text-amber-400 mt-0.5">0</p>
+        </div>
+        <div class="w-9 h-9 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center">
+          <i class="fa-solid fa-filter text-sm"></i>
+        </div>
+      </div>
+
+      <div class="glass-panel p-4 rounded-xl border border-slate-800 flex items-center justify-between">
+        <div>
+          <p class="text-[11px] font-medium text-slate-400">Təkrarlar (Deduplicated)</p>
+          <p id="statDuplicates" class="text-2xl font-extrabold text-purple-400 mt-0.5">0</p>
+        </div>
+        <div class="w-9 h-9 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center">
+          <i class="fa-solid fa-copy text-sm"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIVE CONSOLE TICKER -->
+    <div class="glass-panel rounded-xl p-3 text-xs font-mono text-slate-400 flex items-center justify-between">
+      <div class="flex items-center space-x-2 truncate">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 glow-dot flex-shrink-0"></span>
+        <span id="logTicker" class="truncate text-slate-300">Sistem hazırdır. Filtrləri seçib "Axtarışa Başla" düyməsini klikləyin.</span>
+      </div>
+      <span id="scanIndicator" class="hidden text-emerald-400 text-[11px] flex-shrink-0 font-sans">
+        <i class="fa-solid fa-circle-notch fa-spin mr-1"></i> Skan aparılır...
+      </span>
+    </div>
+
+    <!-- RESULTS DATA TABLE SECTION -->
+    <div class="glass-panel rounded-2xl overflow-hidden shadow-2xl border border-slate-800">
+      
+      <!-- Table Header & Toolbar -->
+      <div class="px-5 py-4 border-b border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-900/70">
+        <div class="flex items-center space-x-3 w-full sm:w-auto">
+          <h2 class="text-base font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-table-list text-emerald-400"></i>
+            <span>Çıxarılan Əlaqələr və Qiymət Təhlili</span>
+          </h2>
+          <span id="badgeTableCount" class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">0 nəticə</span>
+        </div>
+
+        <!-- Table Controls: Search & Export -->
+        <div class="flex items-center space-x-2.5 w-full sm:w-auto justify-end">
+          <div class="relative w-full sm:w-56">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-xs text-slate-400"></i>
+            <input id="tblFilterInput" onkeyup="filterTableRows()" type="text" placeholder="Nəticələrdə axtar..." class="w-full glass-input rounded-lg pl-8 pr-3 py-1.5 text-xs text-white focus:outline-none">
+          </div>
+
+          <button onclick="exportToExcel()" class="px-3.5 py-1.5 rounded-lg bg-emerald-600/90 hover:bg-emerald-500 text-white text-xs font-semibold flex items-center space-x-1.5 transition-all shadow-md shadow-emerald-600/20">
+            <i class="fa-solid fa-file-excel"></i>
+            <span>Excel İxrac</span>
+          </button>
+
+          <button onclick="exportToCSV()" class="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center space-x-1.5 transition-all border border-slate-700">
+            <i class="fa-solid fa-file-csv"></i>
+            <span>CSV</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Data Table -->
+      <div class="overflow-x-auto max-h-[600px] overflow-y-auto">
+        <table class="w-full text-left text-xs text-slate-300">
+          <thead class="sticky top-0 z-10 bg-slate-900/95 text-slate-400 uppercase text-[11px] font-semibold tracking-wider border-b border-slate-800">
+            <tr>
+              <th scope="col" class="py-3 px-3 w-10 text-center">№</th>
+              <th scope="col" class="py-3 px-3">Mənbə</th>
+              <th scope="col" class="py-3 px-3">Ad / Əlaqədar Şəxs</th>
+              <th scope="col" class="py-3 px-3 text-center">Əlaqə Nömrəsi</th>
+              <th scope="col" class="py-3 px-3 text-center">Birbaşa Əlaqə</th>
+              <th scope="col" class="py-3 px-3 text-right">Qiymət (AZN)</th>
+              <th scope="col" class="py-3 px-3 text-center">Qiymət Trendi</th>
+              <th scope="col" class="py-3 px-3 text-center">Otaq / Sahə</th>
+              <th scope="col" class="py-3 px-3 text-center">Kupça / Şərtlər</th>
+              <th scope="col" class="py-3 px-3">Yerləşmə</th>
+              <th scope="col" class="py-3 px-3 text-center">Elan</th>
+            </tr>
+          </thead>
+          <tbody id="leadsTableBody" class="divide-y divide-slate-800/60 font-medium">
+            <tr id="emptyRowPlaceholder">
+              <td colspan="11" class="text-center py-16 text-slate-500">
+                <i class="fa-solid fa-database text-3xl mb-3 block text-slate-600"></i>
+                Hələ heç bir elan toplanmayıb. Filtrləri seçib <span class="text-emerald-400 font-semibold">"Axtarışa Başla"</span> düyməsinə klikləyin.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ================= LICENSE ACTIVATION MODAL ================= -->
+  <div id="licenseModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md transition-opacity">
+    <div class="glass-panel w-full max-w-md rounded-2xl p-6 sm:p-8 shadow-2xl border border-slate-700/80 relative">
+      
+      <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-400 mx-auto flex items-center justify-center text-white text-2xl shadow-xl shadow-emerald-500/20 mb-4">
+        <i class="fa-solid fa-key"></i>
+      </div>
+
+      <h3 class="text-xl font-extrabold text-white text-center">BinaLeadPro Cloud Giriş</h3>
+      <p class="text-xs text-slate-400 text-center mt-1 mb-6">Sistemə daxil olmaq üçün sizə verilmiş 24 saatlıq sınaq və ya abunə lisenziya kodunu daxil edin.</p>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">Lisenziya Kodu</label>
+          <div class="relative">
+            <i class="fa-solid fa-shield-halved absolute left-3.5 top-3 text-slate-400 text-sm"></i>
+            <input id="modalKeyInput" type="text" placeholder="BLP-WEB-XXXX-YYYY" class="w-full glass-input rounded-xl pl-10 pr-4 py-2.5 text-sm uppercase tracking-wider font-mono text-white placeholder-slate-500 focus:outline-none">
+          </div>
+        </div>
+
+        <div id="modalAlertBox" class="hidden p-3 rounded-xl text-xs font-medium border"></div>
+
+        <button id="btnActivateKey" onclick="activateLicenseKey()" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold text-sm transition-all shadow-lg shadow-emerald-500/25 flex items-center justify-center space-x-2">
+          <span>Aktivləşdir və Daxil Ol</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+
+        <div class="pt-4 border-t border-slate-800 text-center">
+          <p class="text-[11px] text-slate-400">
+            Lisenziya kodunuz yoxdur?
+            <a href="https://wa.me/994772195050?text=Salam,%20BinaLeadPro%20Cloud%20sınaq%20kodu%20və%20dəstək%20üçün%20yazıram." target="_blank" class="text-emerald-400 font-semibold hover:underline block mt-1">
+              <i class="fa-brands fa-whatsapp text-emerald-400 mr-1"></i> Dəstək / Satış ilə Əlaqə
+            </a>
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= JAVASCRIPT APP LOGIC ================= -->
+  <script>
+    let currentTargetType = "FSBO";
+    let currentSessionToken = localStorage.getItem("blp_web_session") || "";
+    let licenseCountdownInterval = null;
+    let eventSource = null;
+    let leadsData = [];
+    let locationsData = {};
+    let selectedRooms = new Set();
+
+    const modal = document.getElementById("licenseModal");
+    const modalKeyInput = document.getElementById("modalKeyInput");
+    const modalAlertBox = document.getElementById("modalAlertBox");
+    const licenseTimeRemaining = document.getElementById("licenseTimeRemaining");
+    const leadsTableBody = document.getElementById("leadsTableBody");
+    const emptyRowPlaceholder = document.getElementById("emptyRowPlaceholder");
+    const badgeTableCount = document.getElementById("badgeTableCount");
+    const btnStart = document.getElementById("btnStart");
+    const btnStop = document.getElementById("btnStop");
+    const logTicker = document.getElementById("logTicker");
+    const scanIndicator = document.getElementById("scanIndicator");
+
+    const statAccepted = document.getElementById("statAccepted");
+    const statScanned = document.getElementById("statScanned");
+    const statSkipped = document.getElementById("statSkipped");
+    const statDuplicates = document.getElementById("statDuplicates");
+
+    window.addEventListener("DOMContentLoaded", async () => {
+      await loadLocations();
+      await verifyExistingSession();
+    });
+
+    function toggleRoom(btn, roomNum) {
+      if (selectedRooms.has(roomNum)) {
+        selectedRooms.delete(roomNum);
+        btn.classList.remove("active");
+      } else {
+        selectedRooms.add(roomNum);
+        btn.classList.add("active");
+      }
+    }
+
+    function clearRooms() {
+      selectedRooms.clear();
+      document.querySelectorAll(".room-pill").forEach(p => p.classList.remove("active"));
+    }
+
+    async function verifyExistingSession() {
+      if (!currentSessionToken) {
+        openLicenseModal();
+        return;
+      }
+      try {
+        const resp = await fetch("/api/license/status", {
+          headers: { "X-Session-Token": currentSessionToken }
+        });
+        if (resp.ok) {
+          const data = await resp.json();
+          closeLicenseModal();
+          startLicenseTimer(data.remaining_seconds);
+        } else {
+          openLicenseModal("Lisenziyanızın vaxtı bitmişdir. Yeni kod daxil edin.");
+        }
+      } catch (err) {
+        console.error("Session verify error:", err);
+      }
+    }
+
+    function openLicenseModal(errorMsg = "") {
+      modal.classList.remove("hidden");
+      if (errorMsg) {
+        showAlert(errorMsg, "error");
+      } else {
+        modalAlertBox.classList.add("hidden");
+      }
+    }
+
+    function closeLicenseModal() {
+      modal.classList.add("hidden");
+    }
+
+    function showAlert(msg, type = "error") {
+      modalAlertBox.classList.remove("hidden");
+      if (type === "error") {
+        modalAlertBox.className = "p-3 rounded-xl text-xs font-medium border bg-rose-500/10 border-rose-500/30 text-rose-300";
+      } else {
+        modalAlertBox.className = "p-3 rounded-xl text-xs font-medium border bg-emerald-500/10 border-emerald-500/30 text-emerald-300";
+      }
+      modalAlertBox.innerHTML = `<i class="fa-solid fa-circle-exclamation mr-1.5"></i> ${msg}`;
+    }
+
+    async function activateLicenseKey() {
+      const key = modalKeyInput.value.trim();
+      if (!key) {
+        showAlert("Zəhmət olmasa lisenziya açarını daxil edin.");
+        return;
+      }
+
+      const btn = document.getElementById("btnActivateKey");
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> <span>Yoxlanılır...</span>`;
+
+      try {
+        const resp = await fetch("/api/license/activate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ key: key })
+        });
+
+        const data = await resp.json();
+        if (resp.ok && data.success) {
+          currentSessionToken = data.session_token;
+          localStorage.setItem("blp_web_session", currentSessionToken);
+          showAlert("Lisenziya uğurla aktivləşdirildi! Giriş edilir...", "success");
+          startLicenseTimer(data.remaining_seconds);
+          setTimeout(() => {
+            closeLicenseModal();
+          }, 1000);
+        } else {
+          showAlert(data.error || "Açar aktivləşdirilə bilmədi.");
+        }
+      } catch (e) {
+        showAlert("Serverlə əlaqə qurularkən xəta baş verdi.");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span>Aktivləşdir və Daxil Ol</span> <i class="fa-solid fa-arrow-right"></i>`;
+      }
+    }
+
+    function startLicenseTimer(totalSeconds) {
+      if (licenseCountdownInterval) clearInterval(licenseCountdownInterval);
+      let rem = totalSeconds;
+
+      function updateDisplay() {
+        if (rem <= 0) {
+          licenseTimeRemaining.innerText = "Bitdi";
+          licenseTimeRemaining.className = "font-semibold text-rose-400";
+          openLicenseModal("Lisenziya müddətiniz başa çatdı. Zəhmət olmasa yeni açar daxil edin.");
+          clearInterval(licenseCountdownInterval);
+          return;
+        }
+        const h = Math.floor(rem / 3600);
+        const m = Math.floor((rem % 3600) / 60);
+        const s = rem % 60;
+        licenseTimeRemaining.innerText = `${h}s ${m}d ${s}san`;
+        rem--;
+      }
+
+      updateDisplay();
+      licenseCountdownInterval = setInterval(updateDisplay, 1000);
+    }
+
+    async function loadLocations() {
+      try {
+        const resp = await fetch("/api/locations");
+        if (resp.ok) {
+          locationsData = await resp.json();
+          onRegionChange();
+        }
+      } catch (e) {
+        console.error("Locations fetch error:", e);
+      }
+    }
+
+    function onRegionChange() {
+      const reg = document.getElementById("selRegion").value;
+      const selSub = document.getElementById("selSublocation");
+      selSub.innerHTML = `<option value="Bütün rayon üzrə">Bütün rayon üzrə</option>`;
+
+      if (locationsData[reg] && locationsData[reg].sublocations) {
+        const subs = locationsData[reg].sublocations;
+        for (const [subName, subId] of Object.entries(subs)) {
+          const opt = document.createElement("option");
+          opt.value = subName;
+          opt.innerText = subName;
+          selSub.appendChild(opt);
+        }
+      }
+    }
+
+    function setTargetType(type) {
+      currentTargetType = type;
+      const tabFSBO = document.getElementById("tabFSBO");
+      const tabAGENT = document.getElementById("tabAGENT");
+
+      if (type === "FSBO") {
+        tabFSBO.className = "flex items-center space-x-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all bg-emerald-500 text-white shadow-md shadow-emerald-500/20";
+        tabAGENT.className = "flex items-center space-x-2 px-4 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition-all";
+      } else {
+        tabAGENT.className = "flex items-center space-x-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all bg-blue-600 text-white shadow-md shadow-blue-600/20";
+        tabFSBO.className = "flex items-center space-x-2 px-4 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition-all";
+      }
+    }
+
+    function startScraping() {
+      if (!currentSessionToken) {
+        openLicenseModal("Zəhmət olmasa əvvəlcə lisenziya kodunu daxil edin.");
+        return;
+      }
+
+      const sources = [];
+      if (document.getElementById("chkSourceBina").checked) sources.push("bina");
+      if (document.getElementById("chkSourceYeni").checked) sources.push("yeni");
+      if (document.getElementById("chkSourceTap").checked) sources.push("tap");
+
+      if (sources.length === 0) {
+        alert("Zəhmət olmasa ən azı bir mənbə seçin (bina.az, yeniemlak və ya tap.az).");
+        return;
+      }
+
+      leadsData = [];
+      leadsTableBody.innerHTML = "";
+      badgeTableCount.innerText = "0 nəticə";
+      statAccepted.innerText = "0";
+      statScanned.innerText = "0";
+      statSkipped.innerText = "0";
+      statDuplicates.innerText = "0";
+
+      btnStart.style.display = "none";
+      btnStop.style.display = "flex";
+      scanIndicator.classList.remove("hidden");
+      logTicker.innerText = "Axtarış mühərriki başladılır...";
+
+      const reg = document.getElementById("selRegion").value;
+      const sub = document.getElementById("selSublocation").value;
+      const listType = document.getElementById("selListingType").value;
+      const cat = document.getElementById("selCategory").value;
+      const pMin = document.getElementById("numPriceMin").value;
+      const pMax = document.getElementById("numPriceMax").value;
+      const aMin = document.getElementById("numAreaMin").value;
+      const aMax = document.getElementById("numAreaMax").value;
+      const maxBina = document.getElementById("numMaxBina").value || 20;
+      const maxYeni = document.getElementById("numMaxYeni").value || 10;
+      const maxTap = document.getElementById("numMaxTap").value || 5;
+
+      const hasKupca = document.getElementById("chkKupca").checked;
+      const hasIpoteka = document.getElementById("chkIpoteka").checked;
+      const hasTemir = document.getElementById("chkTemir").checked;
+
+      const params = new URLSearchParams({
+        session_token: currentSessionToken,
+        target_type: currentTargetType,
+        sources: sources.join(","),
+        region_name: reg,
+        sublocation_name: sub,
+        listing_type: listType,
+        category_name: cat,
+        has_bill_of_sale: hasKupca,
+        has_mortgage: hasIpoteka,
+        has_repair: hasTemir,
+        max_bina: maxBina,
+        max_yeni: maxYeni,
+        max_tap: maxTap
+      });
+
+      if (selectedRooms.size > 0) {
+        params.append("room_ids", Array.from(selectedRooms).join(","));
+      }
+      if (pMin) params.append("price_min", pMin);
+      if (pMax) params.append("price_max", pMax);
+      if (aMin) params.append("area_min", aMin);
+      if (aMax) params.append("area_max", aMax);
+
+      eventSource = new EventSource(`/api/scrape/stream?${params.toString()}`);
+
+      eventSource.addEventListener("log", (e) => {
+        const msg = JSON.parse(e.data);
+        logTicker.innerText = msg;
+      });
+
+      eventSource.addEventListener("stats", (e) => {
+        const stats = JSON.parse(e.data);
+        statAccepted.innerText = stats.accepted || 0;
+        statScanned.innerText = stats.scanned || 0;
+        statSkipped.innerText = stats.skipped || 0;
+        statDuplicates.innerText = stats.duplicates || 0;
+      });
+
+      eventSource.addEventListener("lead", (e) => {
+        const lead = JSON.parse(e.data);
+        leadsData.push(lead);
+        appendLeadToTable(lead, leadsData.length);
+      });
+
+      eventSource.addEventListener("done", (e) => {
+        const summary = JSON.parse(e.data);
+        logTicker.innerText = `Axtarış yekunlaşdı! Cəmi ${leadsData.length} ədəd unikal lead toplandı.`;
+        cleanupScrapingUI();
+      });
+
+      eventSource.addEventListener("error", (e) => {
+        try {
+          const errData = JSON.parse(e.data);
+          alert(errData.error || "Axtarış zamanı xəta baş verdi.");
+        } catch (_) {}
+        cleanupScrapingUI();
+      });
+
+      eventSource.onerror = () => {
+        cleanupScrapingUI();
+      };
+    }
+
+    async function stopScraping() {
+      if (eventSource) {
+        eventSource.close();
+      }
+      try {
+        await fetch("/api/scrape/stop", {
+          headers: { "X-Session-Token": currentSessionToken }
+        });
+      } catch (_) {}
+      cleanupScrapingUI();
+      logTicker.innerText = "Axtarış dayandırıldı.";
+    }
+
+    function cleanupScrapingUI() {
+      if (eventSource) {
+        eventSource.close();
+        eventSource = null;
+      }
+      btnStart.style.display = "flex";
+      btnStop.style.display = "none";
+      scanIndicator.classList.add("hidden");
+    }
+
+    function appendLeadToTable(lead, idx) {
+      if (emptyRowPlaceholder && emptyRowPlaceholder.parentNode) {
+        emptyRowPlaceholder.remove();
+      }
+
+      badgeTableCount.innerText = `${leadsData.length} nəticə`;
+
+      const tr = document.createElement("tr");
+      tr.className = "hover:bg-slate-800/50 transition-colors fade-in-row";
+
+      // Phone for WhatsApp / Tel
+      const rawPhone = lead["Əlaqə Nömrəsi"] || "";
+      const cleanDigits = rawPhone.replace(/\D/g, "");
+      const waNumber = cleanDigits.startsWith("0") ? "994" + cleanDigits.slice(1) : (cleanDigits.startsWith("994") ? cleanDigits : "994" + cleanDigits);
+      const waLink = `https://wa.me/${waNumber}?text=Salam,%20elanınızla%20bağlı%20əlaqə%20saxlayıram:`;
+
+      // Source badge styling
+      const src = lead["Mənbə"] || "bina.az";
+      let srcBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">bina.az</span>`;
+      if (src.includes("yeni")) {
+        srcBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">yeniemlak</span>`;
+      } else if (src.includes("tap")) {
+        srcBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-500/10 text-purple-400 border border-purple-500/20">tap.az</span>`;
+      }
+
+      // Price and Trend
+      const priceVal = lead["Qiymət (AZN)"] ? Number(lead["Qiymət (AZN)"]).toLocaleString('az-AZ') + " AZN" : "-";
+      const sqmVal = lead["m² Qiyməti (AZN)"] && lead["m² Qiyməti (AZN)"] !== '-' ? `${Number(lead["m² Qiyməti (AZN)"]).toLocaleString('az-AZ')} AZN/m²` : "";
+      
+      const trend = lead["Qiymət Trendi"] || "Bazar Qiyməti";
+      let trendBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-400 border border-slate-700">Bazar Qiyməti</span>`;
+      if (trend.includes("Endirim")) {
+        trendBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">🔻 Endirimli</span>`;
+      } else if (trend.includes("Təcili")) {
+        trendBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-500/15 text-rose-400 border border-rose-500/30">🔥 Təcili Satış</span>`;
+      } else if (trend.includes("Kredit")) {
+        trendBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-500/15 text-purple-400 border border-purple-500/30">💳 Daxili Kredit</span>`;
+      }
+
+      // Special condition badges
+      const hasKupca = lead["Kupça"] === "Var";
+      const hasIpoteka = lead["İpoteka"] === "Var";
+      const hasTemir = lead["Təmir"] === "Var";
+
+      let conditionTags = [];
+      if (hasKupca) conditionTags.push(`<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Kupça</span>`);
+      if (hasIpoteka) conditionTags.push(`<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">İpoteka</span>`);
+      if (hasTemir) conditionTags.push(`<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">Təmirli</span>`);
+      if (conditionTags.length === 0) conditionTags.push(`<span class="text-slate-500">-</span>`);
+
+      tr.innerHTML = `
+        <td class="py-3 px-3 text-center text-slate-500 font-mono">${idx}</td>
+        <td class="py-3 px-3 whitespace-nowrap">${srcBadge}</td>
+        <td class="py-3 px-3 font-semibold text-white whitespace-nowrap">
+          <div>${lead["Ad / Mülkiyyətçi"] || lead["Agent Adı"] || "Vasitəçi"}</div>
+          ${lead["Agentlik / Şirkət"] && lead["Agentlik / Şirkət"] !== '-' ? `<div class="text-[10px] text-slate-400 font-normal truncate max-w-[150px]">${lead["Agentlik / Şirkət"]}</div>` : ''}
+        </td>
+        <td class="py-3 px-3 text-center font-bold text-emerald-400 font-mono whitespace-nowrap">${rawPhone}</td>
+        <td class="py-3 px-3 text-center whitespace-nowrap">
+          <div class="inline-flex items-center space-x-1.5">
+            <a href="${waLink}" target="_blank" title="WhatsApp-da yaz" class="w-7 h-7 rounded-lg bg-emerald-500/20 hover:bg-emerald-500 text-emerald-400 hover:text-white flex items-center justify-center transition-all shadow-sm">
+              <i class="fa-brands fa-whatsapp text-sm"></i>
+            </a>
+            <a href="tel:${rawPhone}" title="Zəng et" class="w-7 h-7 rounded-lg bg-blue-500/20 hover:bg-blue-500 text-blue-400 hover:text-white flex items-center justify-center transition-all shadow-sm">
+              <i class="fa-solid fa-phone text-xs"></i>
+            </a>
+          </div>
+        </td>
+        <td class="py-3 px-3 text-right whitespace-nowrap">
+          <div class="font-bold text-white">${priceVal}</div>
+          ${sqmVal ? `<div class="text-[10px] text-slate-400 font-normal">${sqmVal}</div>` : ''}
+        </td>
+        <td class="py-3 px-3 text-center whitespace-nowrap">${trendBadge}</td>
+        <td class="py-3 px-3 text-center text-slate-300 whitespace-nowrap">${lead["Otaq"] || "-"} ot. / ${lead["Sahə (m²)"] || "-"} m²</td>
+        <td class="py-3 px-3 text-center whitespace-nowrap">
+          <div class="flex items-center justify-center gap-1">${conditionTags.join(' ')}</div>
+        </td>
+        <td class="py-3 px-3 text-slate-300 max-w-xs truncate" title="${lead["Yerləşmə"] || ''}">${lead["Yerləşmə"] || "-"}</td>
+        <td class="py-3 px-3 text-center whitespace-nowrap">
+          <a href="${lead["Elan Keçidi"] || lead["Elan Linki"] || '#'}" target="_blank" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-blue-400 text-xs font-semibold inline-flex items-center space-x-1 border border-slate-700 transition-colors">
+            <span>Bax</span>
+            <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+          </a>
+        </td>
+      `;
+
+      leadsTableBody.appendChild(tr);
+    }
+
+    function filterTableRows() {
+      const q = document.getElementById("tblFilterInput").value.toLowerCase();
+      const rows = leadsTableBody.getElementsByTagName("tr");
+      for (let i = 0; i < rows.length; i++) {
+        const text = rows[i].innerText.toLowerCase();
+        rows[i].style.display = text.includes(q) ? "" : "none";
+      }
+    }
+
+    async function exportToExcel() {
+      if (leadsData.length === 0) {
+        alert("İxrac ediləcək heç bir lead tapılmadı.");
+        return;
+      }
+
+      try {
+        const resp = await fetch("/api/export/excel", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Session-Token": currentSessionToken
+          },
+          body: JSON.stringify({ leads: leadsData })
+        });
+
+        if (resp.ok) {
+          const blob = await resp.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `BinaLeadPro_${currentTargetType}_${Date.now()}.xlsx`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(url);
+        } else {
+          alert("Excel faylı yaradılarkən xəta baş verdi.");
+        }
+      } catch (err) {
+        console.error("Excel export error:", err);
+      }
+    }
+
+    function exportToCSV() {
+      if (leadsData.length === 0) {
+        alert("İxrac ediləcək heç bir lead tapılmadı.");
+        return;
+      }
+
+      const headers = Object.keys(leadsData[0]);
+      const csvRows = [];
+      csvRows.push(headers.join(","));
+
+      for (const row of leadsData) {
+        const values = headers.map(h => {
+          const val = row[h] === undefined ? "" : String(row[h]);
+          return `"${val.replace(/"/g, '""')}"`;
+        });
+        csvRows.push(values.join(","));
+      }
+
+      const csvString = "\uFEFF" + csvRows.join("\n");
+      const blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `BinaLeadPro_${currentTargetType}_${Date.now()}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>
